@@ -11,48 +11,59 @@ from datetime import datetime
 from playwright.async_api import async_playwright
 
 # ============================================================
-# CONFIGURAZIONE
+# CONFIGURAZIONE - 6 ACCOUNT CON PROXY DIVERSI
 # ============================================================
 
 HEADLESS = True
 
-# 🔥 6 ACCOUNT - TUTTI CON LO STESSO PROXY (TEST)
-# DOPO METTEREMO PROXY DIVERSI PER OGNUNO
 ACCOUNTS = [
-    {"email": "serenamilani74@gmail.com", "password": "4591##Pane", "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"},
-    {"email": "vincenzogrulli@yahoo.com", "password": "dave45!!MU", "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"},
-    {"email": "marziadelbello@tiscali.it", "password": "PA45$!!#na", "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"},
-    {"email": "paolovecchi_62@gmail.com", "password": "UT56$!dama", "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"},
-    {"email": "veronicasibrni@libero.it", "password": "HJGF52!!dama", "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"},
-    {"email": "nanniserena@virgilio.it", "password": "PETR$!45vu", "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"}
+    {
+        "email": "serenamilani74@gmail.com",
+        "password": "4591##Pane",
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"
+    },
+    {
+        "email": "vincenzogrulli@yahoo.com",
+        "password": "dave45!!MU",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@209.50.177.59:3129"
+    },
+    {
+        "email": "marziadelbello@tiscali.it",
+        "password": "PA45$!!#na",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@65.111.1.194:3129"
+    },
+    {
+        "email": "paolovecchi_62@gmail.com",
+        "password": "UT56$!dama",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.232.62:3129"
+    },
+    {
+        "email": "veronicasibrni@libero.it",
+        "password": "HJGF52!!dama",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.244.100:3129"
+    },
+    {
+        "email": "nanniserena@virgilio.it",
+        "password": "PETR$!45vu",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.207.33.227:3129"
+    }
 ]
 
 # ============================================================
-# STEALTH JS - NASCONDI L'AUTOMAZIONE
+# STEALTH JS
 # ============================================================
 
 STEALTH_JS = """
-// Nascondi webdriver
 Object.defineProperty(navigator, 'webdriver', {
     get: () => undefined
 });
-
-// Plugin finti
 Object.defineProperty(navigator, 'plugins', {
     get: () => [1, 2, 3, 4, 5]
 });
-
-// Lingue
 Object.defineProperty(navigator, 'languages', {
     get: () => ['it-IT', 'it', 'en-US', 'en']
 });
-
-// Chrome
-window.chrome = {
-    runtime: {}
-};
-
-// Permissions
+window.chrome = { runtime: {} };
 const originalQuery = window.navigator.permissions.query;
 window.navigator.permissions.query = (parameters) => (
     parameters.name === 'notifications' ?
@@ -90,7 +101,6 @@ def parse_proxy(proxy_str):
 # ============================================================
 
 async def movimenti_umani(page):
-    """Simula movimenti umani casuali"""
     try:
         x = random.randint(100, 800)
         y = random.randint(100, 500)
@@ -135,10 +145,8 @@ async def gestisci_account(account_data):
     
     log(email, f"🌐 Proxy: {proxy_str.split('@')[1] if '@' in proxy_str else proxy_str}")
     
-    # User-Agent reale
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     
-    # Argomenti anti-rilevamento
     args = [
         '--disable-blink-features=AutomationControlled',
         '--no-sandbox',
@@ -161,13 +169,10 @@ async def gestisci_account(account_data):
         
         page = await context.new_page()
         
-        # Inietta stealth
         await page.add_init_script(STEALTH_JS)
         
         try:
-            # ============================================================
             # LOGIN
-            # ============================================================
             log(email, "📧 Login...")
             await page.goto("https://antautosurf.com/", wait_until="domcontentloaded")
             await asyncio.sleep(random.uniform(1, 2))
@@ -192,9 +197,7 @@ async def gestisci_account(account_data):
             
             log(email, "✅ Login completato!")
             
-            # ============================================================
             # DASHBOARD
-            # ============================================================
             log(email, "📊 Dashboard...")
             await page.goto(f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=")
             await asyncio.sleep(random.uniform(2, 3))
@@ -226,9 +229,7 @@ async def gestisci_account(account_data):
             csrf = csrf_match.group(1)
             log(email, f"🎫 CSRF: {csrf[:16]}...")
             
-            # ============================================================
             # SURF
-            # ============================================================
             log(email, "🚀 Avvio surf...")
             
             key = ""
@@ -297,7 +298,7 @@ async def gestisci_account(account_data):
                     continue
                 
                 ad_url = pulisci_url(parts[0])
-                time_val = int(parts[1])  # 🔥 Timer dalla response!
+                time_val = int(parts[1])
                 key = parts[2]
                 ad_id = parts[3]
                 
