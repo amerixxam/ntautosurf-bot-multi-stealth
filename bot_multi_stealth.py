@@ -16,6 +16,7 @@ from playwright.async_api import async_playwright
 
 HEADLESS = True
 
+# 🔥 OGNI ACCOUNT HA IL SUO PROXY (IP DIVERSO!)
 ACCOUNTS = [
     {
         "email": "serenamilani74@gmail.com",
@@ -50,20 +51,31 @@ ACCOUNTS = [
 ]
 
 # ============================================================
-# STEALTH JS
+# STEALTH JS - NASCONDI L'AUTOMAZIONE
 # ============================================================
 
 STEALTH_JS = """
+// Nascondi webdriver
 Object.defineProperty(navigator, 'webdriver', {
     get: () => undefined
 });
+
+// Plugin finti
 Object.defineProperty(navigator, 'plugins', {
     get: () => [1, 2, 3, 4, 5]
 });
+
+// Lingue
 Object.defineProperty(navigator, 'languages', {
     get: () => ['it-IT', 'it', 'en-US', 'en']
 });
-window.chrome = { runtime: {} };
+
+// Chrome
+window.chrome = {
+    runtime: {}
+};
+
+// Permissions
 const originalQuery = window.navigator.permissions.query;
 window.navigator.permissions.query = (parameters) => (
     parameters.name === 'notifications' ?
@@ -101,6 +113,7 @@ def parse_proxy(proxy_str):
 # ============================================================
 
 async def movimenti_umani(page):
+    """Simula movimenti umani casuali"""
     try:
         x = random.randint(100, 800)
         y = random.randint(100, 500)
@@ -145,8 +158,10 @@ async def gestisci_account(account_data):
     
     log(email, f"🌐 Proxy: {proxy_str.split('@')[1] if '@' in proxy_str else proxy_str}")
     
+    # User-Agent reale
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     
+    # Argomenti anti-rilevamento
     args = [
         '--disable-blink-features=AutomationControlled',
         '--no-sandbox',
@@ -169,38 +184,48 @@ async def gestisci_account(account_data):
         
         page = await context.new_page()
         
+        # Inietta stealth
         await page.add_init_script(STEALTH_JS)
         
         try:
+            # ============================================================
             # LOGIN
+            # ============================================================
             log(email, "📧 Login...")
-            await page.goto("https://antautosurf.com/", wait_until="domcontentloaded")
-            await asyncio.sleep(random.uniform(1, 2))
+            await page.goto("https://antautosurf.com/", wait_until="domcontentloaded", timeout=60000)
+            await asyncio.sleep(random.uniform(2, 3))
             
             await movimenti_umani(page)
             
             await page.fill('input[name="bitcoinwallet"]', email)
-            await asyncio.sleep(random.uniform(0.3, 0.8))
+            await asyncio.sleep(random.uniform(0.5, 1.0))
             
             await page.click('input[type="submit"][value*="Enter"]')
-            await asyncio.sleep(random.uniform(2, 3))
+            await asyncio.sleep(random.uniform(3, 5))
             
             html = await page.content()
             
             if "Please enter Password" in html:
                 log(email, "🔑 Login con password...")
                 await page.fill('input[name="password"]', password)
-                await asyncio.sleep(random.uniform(0.3, 0.8))
+                await asyncio.sleep(random.uniform(0.5, 1.0))
                 await page.click('input[value="Enter"]')
-                await asyncio.sleep(random.uniform(2, 3))
+                await asyncio.sleep(random.uniform(3, 5))
                 html = await page.content()
             
             log(email, "✅ Login completato!")
             
-            # DASHBOARD
+            # ============================================================
+            # DASHBOARD - ATTESA PIÙ LUNGA
+            # ============================================================
             log(email, "📊 Dashboard...")
-            await page.goto(f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=")
-            await asyncio.sleep(random.uniform(2, 3))
+            await page.goto(
+                f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=",
+                wait_until="domcontentloaded",
+                timeout=60000
+            )
+            await asyncio.sleep(5)  # Attesa più lunga per caricare tutto
+            
             html = await page.content()
             
             # CAPTCHA
@@ -214,6 +239,8 @@ async def gestisci_account(account_data):
                     if "Please Click Similar" not in html_test:
                         log(email, f"   ✅ CAPTCHA RISOLTO! CID: {cid}")
                         break
+                await asyncio.sleep(2)
+                html = await page.content()
             
             # BALANCE
             balance_match = re.search(r'btoday["\']?\s*[=:]\s*([\d.]+)', html)
@@ -223,13 +250,26 @@ async def gestisci_account(account_data):
             # CSRF
             csrf_match = re.search(r'csrf_token=([a-f0-9]+)', html)
             if not csrf_match:
-                log(email, "❌ CSRF non trovato!")
-                return
+                log(email, "❌ CSRF non trovato! Riprovo...")
+                # Ricarica dashboard
+                await page.goto(
+                    f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=",
+                    wait_until="domcontentloaded",
+                    timeout=60000
+                )
+                await asyncio.sleep(3)
+                html = await page.content()
+                csrf_match = re.search(r'csrf_token=([a-f0-9]+)', html)
+                if not csrf_match:
+                    log(email, "❌ CSRF non trovato dopo secondo tentativo!")
+                    return
             
             csrf = csrf_match.group(1)
             log(email, f"🎫 CSRF: {csrf[:16]}...")
             
+            # ============================================================
             # SURF
+            # ============================================================
             log(email, "🚀 Avvio surf...")
             
             key = ""
@@ -261,7 +301,7 @@ async def gestisci_account(account_data):
                 url = "https://antautosurf.com/surf.php?" + "&".join([f"{k}={v}" for k, v in params.items()])
                 
                 try:
-                    await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                    await page.goto(url, wait_until="domcontentloaded", timeout=60000)
                 except Exception as e:
                     log(email, f"⚠️ Errore goto: {e}")
                     await asyncio.sleep(5)
@@ -277,8 +317,12 @@ async def gestisci_account(account_data):
                         log(email, "🔄 Troppi CSRF invalidi!")
                         break
                     
-                    await page.goto(f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=")
-                    await asyncio.sleep(2)
+                    await page.goto(
+                        f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=",
+                        wait_until="domcontentloaded",
+                        timeout=60000
+                    )
+                    await asyncio.sleep(3)
                     html = await page.content()
                     csrf_match = re.search(r'csrf_token=([a-f0-9]+)', html)
                     if csrf_match:
@@ -298,7 +342,7 @@ async def gestisci_account(account_data):
                     continue
                 
                 ad_url = pulisci_url(parts[0])
-                time_val = int(parts[1])
+                time_val = int(parts[1])  # 🔥 Timer dalla response!
                 key = parts[2]
                 ad_id = parts[3]
                 
@@ -318,7 +362,7 @@ async def gestisci_account(account_data):
                 
                 try:
                     new_page = await context.new_page()
-                    await new_page.goto(ad_url, wait_until="domcontentloaded", timeout=10000)
+                    await new_page.goto(ad_url, wait_until="domcontentloaded", timeout=15000)
                     await asyncio.sleep(1)
                 except Exception as e:
                     log(email, f"   ⚠️ Errore apertura: {e}")
@@ -335,7 +379,11 @@ async def gestisci_account(account_data):
                     pass
                 
                 if cycle % 3 == 0:
-                    await page.goto(f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=")
+                    await page.goto(
+                        f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=",
+                        wait_until="domcontentloaded",
+                        timeout=60000
+                    )
                     await asyncio.sleep(2)
                     html = await page.content()
                     csrf_match = re.search(r'csrf_token=([a-f0-9]+)', html)
@@ -361,6 +409,7 @@ async def main():
     print(f"📋 Account: {len(ACCOUNTS)}")
     print(f"🔇 Headless: {HEADLESS}")
     print("="*60)
+    print("🔄 Ogni account ha il suo proxy (IP diverso!)")
     print("🔄 Ogni account fa 10 cicli, poi passa al prossimo")
     print("="*60)
     
