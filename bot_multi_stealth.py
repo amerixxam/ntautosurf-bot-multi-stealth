@@ -20,35 +20,35 @@ HEADLESS = True
 ACCOUNTS = [
     # 🔥 SOSTITUITI CON PROXY NUOVI
     {
-        "email": "serenamilani74@gmail.com",
-        "password": "4591##Pane",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@209.50.177.59:3129"
+        "email": "ninodellarocca@yahoo.com",
+        "password": "UF45$!dama",
+        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@216.26.239.184:3129"
     },
     {
-        "email": "vincenzogrulli@yahoo.com",
-        "password": "dave45!!MU",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@216.26.245.145:3129"
+        "email": "marcogiacchetti@yahoo.com",
+        "password": "LGZE45$!tm",
+        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@65.111.25.153:3129"
     },
     {
-        "email": "marziadelbello@tiscali.it",
-        "password": "PA45$!!#na",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@65.111.1.194:3129"
+        "email": "nicolavigilebari@tiscali.it",
+        "password": "RM56$!RRTT",
+        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@65.111.6.64:3129"
     },
     # ✅ QUESTI GIA' FUNZIONANO
     {
-        "email": "paolovecchi_62@gmail.com",
-        "password": "UT56$!dama",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.167.19.250:3129"
+        "email": "valentinamirgione1245@gmail.com",
+        "password": "UL2454ZM!!ug",
+        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@45.3.34.8:3129"
     },
     {
-        "email": "veronicasibrni@libero.it",
-        "password": "HJGF52!!dama",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.4.191:3129"
+        "email": "pinorenettideluigini@tiscali.it",
+        "password": "YH6595ma!!",
+        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@45.3.33.178:3129"
     },
     {
-        "email": "nanniserena@virgilio.it",
-        "password": "PETR$!45vu",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.207.49.101:3129"
+        "email": "legadilettantibarattini@libero.it",
+        "password": "MZ45$!avanx",
+        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@216.26.228.117:3129"
     }
 ]
 
