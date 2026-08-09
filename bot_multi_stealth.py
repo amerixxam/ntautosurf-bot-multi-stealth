@@ -22,33 +22,33 @@ ACCOUNTS = [
     {
         "email": "ninodellarocca@yahoo.com",
         "password": "UF45$!dama",
-        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@216.26.239.184:3129"
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@216.26.230.207:3129"
     },
     {
         "email": "marcogiacchetti@yahoo.com",
         "password": "LGZE45$!tm",
-        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@65.111.25.153:3129"
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@104.207.32.5:3129"
     },
     {
         "email": "nicolavigilebari@tiscali.it",
         "password": "RM56$!RRTT",
-        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@65.111.6.64:3129"
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@209.50.168.162:3129"
     },
     # ✅ QUESTI GIA' FUNZIONANO
     {
         "email": "valentinamirgione1245@gmail.com",
         "password": "UL2454ZM!!ug",
-        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@45.3.34.8:3129"
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@216.26.244.184:3129"
     },
     {
         "email": "pinorenettideluigini@tiscali.it",
         "password": "YH6595ma!!",
-        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@45.3.33.178:3129"
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@209.50.166.48:3129"
     },
     {
         "email": "legadilettantibarattini@libero.it",
         "password": "MZ45$!avanx",
-        "proxy": "a9prl7gincu0:zj5kk58p8eu3jwe@216.26.228.117:3129"
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"
     }
 ]
 
