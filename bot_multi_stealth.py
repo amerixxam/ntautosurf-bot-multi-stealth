@@ -22,7 +22,7 @@ ACCOUNTS = [
     {
         "email": "serenamilani74@gmail.com",
         "password": "4591##Pane",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@151.123.178.129:3129"
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@209.50.177.59:3129"
     },
     {
         "email": "vincenzogrulli@yahoo.com",
@@ -32,7 +32,7 @@ ACCOUNTS = [
     {
         "email": "marziadelbello@tiscali.it",
         "password": "PA45$!!#na",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.5.52:3129"
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@65.111.1.194:3129"
     },
     # ✅ QUESTI GIA' FUNZIONANO
     {
