@@ -22,33 +22,33 @@ ACCOUNTS = [
     {
         "email": "serenamilani74@gmail.com",
         "password": "4591##Pane",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.167.25.19:3129"
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@151.123.178.129:3129"
     },
     {
         "email": "vincenzogrulli@yahoo.com",
         "password": "dave45!!MU",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.252.21:3129"
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.11.191:3129"
     },
     {
         "email": "marziadelbello@tiscali.it",
         "password": "PA45$!!#na",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@45.3.44.227:3129"
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.5.52:3129"
     },
     # ✅ QUESTI GIA' FUNZIONANO
     {
         "email": "paolovecchi_62@gmail.com",
         "password": "UT56$!dama",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.232.62:3129"
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.167.19.250:3129"
     },
     {
         "email": "veronicasibrni@libero.it",
         "password": "HJGF52!!dama",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.244.100:3129"
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.4.191:3129"
     },
     {
         "email": "nanniserena@virgilio.it",
         "password": "PETR$!45vu",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.207.33.227:3129"
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.207.49.101:3129"
     }
 ]
 
