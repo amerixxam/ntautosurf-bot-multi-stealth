@@ -27,7 +27,7 @@ ACCOUNTS = [
     {
         "email": "vincenzogrulli@yahoo.com",
         "password": "dave45!!MU",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.11.191:3129"
+        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@216.26.245.145:3129"
     },
     {
         "email": "marziadelbello@tiscali.it",
