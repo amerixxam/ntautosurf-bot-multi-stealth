@@ -20,35 +20,35 @@ HEADLESS = True
 ACCOUNTS = [
     # 🔥 SOSTITUITI CON PROXY NUOVI
     {
-        "email": "ninodellarocca@yahoo.com",
-        "password": "UF45$!dama",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.207.62.14:3129"
+        "email": "valeriobassettini7234@libero.it",
+        "password": "UH56dame!!",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.207.46.39:3129"
     },
     {
-        "email": "marcogiacchetti@yahoo.com",
-        "password": "LGZE45$!tm",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@216.26.238.47:3129"
+        "email": "paolodellecinese@gmail.com",
+        "password": "RG54zama##",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@151.123.176.118:3129"
     },
     {
-        "email": "nicolavigilebari@tiscali.it",
-        "password": "RM56$!RRTT",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@216.26.231.167:3129"
+        "email": "gigisecondinineri@tiscali.it",
+        "password": "UHGH65$$!!ma",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.207.57.57:3129"
     },
     # ✅ QUESTI GIA' FUNZIONANO
     {
-        "email": "valentinamirgione1245@gmail.com",
-        "password": "UL2454ZM!!ug",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@45.3.37.230:3129"
+        "email": "annadeelsignoriemarchesi@gmail.com",
+        "password": "HG6572na$#",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@209.50.165.174:3129"
     },
     {
-        "email": "pinorenettideluigini@tiscali.it",
-        "password": "YH6595ma!!",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.24.17:3129"
+        "email": "vigilesecondini@tiscali.it",
+        "password": "UR54$!$!dava",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.207.60.167:3129"
     },
     {
-        "email": "legadilettantibarattini@libero.it",
-        "password": "MZ45$!avanx",
-        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@216.26.228.26:3129"
+        "email": "pierluigidelbasso@tiscali.it",
+        "password": "JHGF54$!dama",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.25.29:3129"
     }
 ]
 
@@ -426,4 +426,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("\n🛑 Arresto manuale...")
-        
