@@ -20,35 +20,35 @@ HEADLESS = True
 ACCOUNTS = [
     # 🔥 SOSTITUITI CON PROXY NUOVI
     {
-        "email": "serenamilani74@gmail.com",
-        "password": "4591##Pane",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.167.25.19:3129"
+        "email": "ninodellarocca@yahoo.com",
+        "password": "UF45$!dama",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@104.207.62.14:3129"
     },
     {
-        "email": "vincenzogrulli@yahoo.com",
-        "password": "dave45!!MU",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.252.21:3129"
+        "email": "marcogiacchetti@yahoo.com",
+        "password": "LGZE45$!tm",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@216.26.238.47:3129"
     },
     {
-        "email": "marziadelbello@tiscali.it",
-        "password": "PA45$!!#na",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@45.3.44.227:3129"
+        "email": "nicolavigilebari@tiscali.it",
+        "password": "RM56$!RRTT",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@216.26.231.167:3129"
     },
     # ✅ QUESTI GIA' FUNZIONANO
     {
-        "email": "paolovecchi_62@gmail.com",
-        "password": "UT56$!dama",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.232.62:3129"
+        "email": "valentinamirgione1245@gmail.com",
+        "password": "UL2454ZM!!ug",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@45.3.37.230:3129"
     },
     {
-        "email": "veronicasibrni@libero.it",
-        "password": "HJGF52!!dama",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.244.100:3129"
+        "email": "pinorenettideluigini@tiscali.it",
+        "password": "YH6595ma!!",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@65.111.24.17:3129"
     },
     {
-        "email": "nanniserena@virgilio.it",
-        "password": "PETR$!45vu",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.207.33.227:3129"
+        "email": "legadilettantibarattini@libero.it",
+        "password": "MZ45$!avanx",
+        "proxy": "cm3gl0eyljem:yyb9w8s8n90a0yz@216.26.228.26:3129"
     }
 ]
 
@@ -426,3 +426,4 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("\n🛑 Arresto manuale...")
+        
