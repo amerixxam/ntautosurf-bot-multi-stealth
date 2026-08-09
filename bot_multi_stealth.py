@@ -11,28 +11,30 @@ from datetime import datetime
 from playwright.async_api import async_playwright
 
 # ============================================================
-# CONFIGURAZIONE - 6 ACCOUNT CON PROXY DIVERSI
+# CONFIGURAZIONE - 6 ACCOUNT CON PROXY DIVERSI (AGGIORNATI)
 # ============================================================
 
 HEADLESS = True
 
-# 🔥 OGNI ACCOUNT HA IL SUO PROXY (IP DIVERSO!)
+# 🔥 6 ACCOUNT - TUTTI CON PROXY DIVERSI (3 NUOVI!)
 ACCOUNTS = [
+    # 🔥 SOSTITUITI CON PROXY NUOVI
     {
         "email": "serenamilani74@gmail.com",
         "password": "4591##Pane",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.167.25.19:3129"
     },
     {
         "email": "vincenzogrulli@yahoo.com",
         "password": "dave45!!MU",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@209.50.177.59:3129"
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.252.21:3129"
     },
     {
         "email": "marziadelbello@tiscali.it",
         "password": "PA45$!!#na",
-        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@65.111.1.194:3129"
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@45.3.44.227:3129"
     },
+    # ✅ QUESTI GIA' FUNZIONANO
     {
         "email": "paolovecchi_62@gmail.com",
         "password": "UT56$!dama",
