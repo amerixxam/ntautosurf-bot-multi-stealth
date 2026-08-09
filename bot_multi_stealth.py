@@ -224,7 +224,7 @@ async def gestisci_account(account_data):
             await page.goto(
                 f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=",
                 wait_until="domcontentloaded",
-                timeout=60000
+                timeout=90000
             )
             await asyncio.sleep(5)  # Attesa più lunga per caricare tutto
             
