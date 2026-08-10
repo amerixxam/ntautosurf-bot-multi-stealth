@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# bot_multi_stealth.py - BOT MULTIACCOUNT CON STEALTH
+# bot_multi_stealth.py - BOT MULTIACCOUNT CON STEALTH E ANALISI IP
 
 import os
 import asyncio
@@ -11,73 +11,189 @@ from datetime import datetime
 from playwright.async_api import async_playwright
 
 # ============================================================
-# CONFIGURAZIONE - 6 ACCOUNT CON PROXY DIVERSI (AGGIORNATI)
+# CONFIGURAZIONE - 6 ACCOUNT CON PROXY DIVERSI
 # ============================================================
 
 HEADLESS = True
 
-# 🔥 6 ACCOUNT - TUTTI CON PROXY DIVERSI (3 NUOVI!)
 ACCOUNTS = [
-    # 🔥 SOSTITUITI CON PROXY NUOVI
     {
-        "email": "ninodellarocca@yahoo.com",
-        "password": "UF45$!dama",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@216.26.230.207:3129"
+        "email": "serenamilani74@gmail.com",
+        "password": "4591##Pane",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.167.25.19:3129"
     },
     {
-        "email": "marcogiacchetti@yahoo.com",
-        "password": "LGZE45$!tm",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@104.207.32.5:3129"
+        "email": "vincenzogrulli@yahoo.com",
+        "password": "dave45!!MU",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.252.21:3129"
     },
     {
-        "email": "nicolavigilebari@tiscali.it",
-        "password": "RM56$!RRTT",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@209.50.168.162:3129"
-    },
-    # ✅ QUESTI GIA' FUNZIONANO
-    {
-        "email": "valentinamirgione1245@gmail.com",
-        "password": "UL2454ZM!!ug",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@216.26.244.184:3129"
+        "email": "marziadelbello@tiscali.it",
+        "password": "PA45$!!#na",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@45.3.44.227:3129"
     },
     {
-        "email": "pinorenettideluigini@tiscali.it",
-        "password": "YH6595ma!!",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@209.50.166.48:3129"
+        "email": "paolovecchi_62@gmail.com",
+        "password": "UT56$!dama",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.232.62:3129"
     },
     {
-        "email": "legadilettantibarattini@libero.it",
-        "password": "MZ45$!avanx",
-        "proxy": "el2e3tg0lryu:xyc21kzd8jxvetq@195.63.31.7:3129"
+        "email": "veronicasibrni@libero.it",
+        "password": "HJGF52!!dama",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@216.26.244.100:3129"
+    },
+    {
+        "email": "nanniserena@virgilio.it",
+        "password": "PETR$!45vu",
+        "proxy": "wlt170deuwe4:tosnprlzh5y97c6@104.207.33.227:3129"
     }
 ]
+
+# ============================================================
+# GESTIONE IP - TRACCIA E SALVA IP BLOCCATI
+# ============================================================
+
+IP_TRACKER = {}  # { "account": {"ip": "x.x.x.x", "timestamp": "..."} }
+IP_BLOCCATI_FILE = "ip_bloccati.json"
+
+def carica_ip_bloccati():
+    """Carica la lista degli IP bloccati da file"""
+    try:
+        with open(IP_BLOCCATI_FILE, "r") as f:
+            return set(json.load(f))
+    except:
+        return set()
+
+def salva_ip_bloccati(ip_set):
+    """Salva la lista degli IP bloccati su file"""
+    try:
+        with open(IP_BLOCCATI_FILE, "w") as f:
+            json.dump(list(ip_set), f, indent=2)
+    except:
+        pass
+
+# Carica IP bloccati all'avvio
+IP_BLOCCATI = carica_ip_bloccati()
+print(f"📊 Caricati {len(IP_BLOCCATI)} IP bloccati da file")
+
+async def ottieni_ip_attuale(page):
+    """Ottiene l'IP attuale del browser"""
+    try:
+        await page.goto("https://api.ipify.org?format=json", wait_until="domcontentloaded", timeout=10000)
+        content = await page.content()
+        match = re.search(r'"ip":"([^"]+)"', content)
+        if match:
+            return match.group(1)
+    except Exception as e:
+        print(f"⚠️ Errore rilevamento IP: {e}")
+    return None
+
+async def registra_ip(email, ip):
+    """Registra l'IP usato per un account e controlla duplicati"""
+    if not ip:
+        return
+    
+    IP_TRACKER[email] = {
+        "ip": ip,
+        "timestamp": datetime.now().isoformat()
+    }
+    log(email, f"📌 IP registrato: {ip}")
+    
+    # Controlla se lo stesso IP è usato da altri account
+    ip_duplicato = False
+    for other_email, data in IP_TRACKER.items():
+        if other_email != email and data["ip"] == ip:
+            ip_duplicato = True
+            log(email, f"⚠️⚠️ STESSO IP ({ip}) usato da {other_email[:10]}! ⚠️⚠️")
+    
+    if ip_duplicato:
+        log(email, f"❌ BLOCCO PREVISTO: Antautosurf bloccherà questo IP!")
+        IP_BLOCCATI.add(ip)
+        salva_ip_bloccati(IP_BLOCCATI)
+
+async def controlla_blocco_ip(page, email):
+    """Controlla se la pagina mostra un blocco per IP"""
+    html = await page.content()
+    
+    if "This IP" in html and "already used" in html:
+        match = re.search(r'This IP \((.*?)\) is already used', html)
+        if match:
+            ip_bloccato = match.group(1)
+            log(email, f"❌❌❌ IP BLOCCATO: {ip_bloccato} ❌❌❌")
+            
+            IP_BLOCCATI.add(ip_bloccato)
+            salva_ip_bloccati(IP_BLOCCATI)
+            log(email, f"💾 IP {ip_bloccato} salvato in lista nera")
+            
+            for acc, data in IP_TRACKER.items():
+                if data.get("ip") == ip_bloccato:
+                    log(email, f"   ℹ️ Questo IP era usato da: {acc}")
+            
+            return True, ip_bloccato
+    
+    # Controlla anche il messaggio "Try again tomorrow"
+    if "Try again tomorrow" in html and "different IP" in html:
+        match = re.search(r'This IP \((.*?)\) is already used', html)
+        if match:
+            ip_bloccato = match.group(1)
+            log(email, f"❌❌❌ IP BLOCCATO (try again): {ip_bloccato} ❌❌❌")
+            IP_BLOCCATI.add(ip_bloccato)
+            salva_ip_bloccati(IP_BLOCCATI)
+            return True, ip_bloccato
+    
+    return False, None
+
+def mostra_statistiche_ip():
+    """Mostra statistiche sugli IP usati"""
+    print("\n" + "="*60)
+    print("📊 STATISTICHE IP")
+    print("="*60)
+    
+    if not IP_TRACKER:
+        print("⚠️ Nessun IP registrato")
+        return
+    
+    ip_unici = set()
+    for data in IP_TRACKER.values():
+        ip_unici.add(data["ip"])
+    
+    print(f"📋 Account analizzati: {len(IP_TRACKER)}")
+    print(f"🌐 IP unici: {len(ip_unici)}")
+    print(f"🚫 IP bloccati totali: {len(IP_BLOCCATI)}")
+    
+    if len(ip_unici) == 1 and len(IP_TRACKER) > 1:
+        print("⚠️⚠️ TUTTI GLI ACCOUNT USANO LO STESSO IP! ⚠️⚠️")
+        print("   → Antautosurf li bloccherà tutti!")
+    elif len(ip_unici) < len(IP_TRACKER):
+        print(f"⚠️ Attenzione: {len(IP_TRACKER) - len(ip_unici)} account condividono IP")
+    
+    print("\n📋 Dettaglio IP per account:")
+    for email, data in IP_TRACKER.items():
+        ip = data["ip"]
+        timestamp = data["timestamp"][:16]
+        bloccato = "🔴 BLOCCATO" if ip in IP_BLOCCATI else "🟢 OK"
+        print(f"   {email[:20]} → {ip} {bloccato} ({timestamp})")
+    
+    if IP_BLOCCATI:
+        print(f"\n🚫 IP bloccati salvati: {list(IP_BLOCCATI)}")
+    
+    print("="*60 + "\n")
 
 # ============================================================
 # STEALTH JS - NASCONDI L'AUTOMAZIONE
 # ============================================================
 
 STEALTH_JS = """
-// Nascondi webdriver
 Object.defineProperty(navigator, 'webdriver', {
     get: () => undefined
 });
-
-// Plugin finti
 Object.defineProperty(navigator, 'plugins', {
     get: () => [1, 2, 3, 4, 5]
 });
-
-// Lingue
 Object.defineProperty(navigator, 'languages', {
     get: () => ['it-IT', 'it', 'en-US', 'en']
 });
-
-// Chrome
-window.chrome = {
-    runtime: {}
-};
-
-// Permissions
+window.chrome = { runtime: {} };
 const originalQuery = window.navigator.permissions.query;
 window.navigator.permissions.query = (parameters) => (
     parameters.name === 'notifications' ?
@@ -115,7 +231,6 @@ def parse_proxy(proxy_str):
 # ============================================================
 
 async def movimenti_umani(page):
-    """Simula movimenti umani casuali"""
     try:
         x = random.randint(100, 800)
         y = random.randint(100, 500)
@@ -143,6 +258,63 @@ def pulisci_ad_id(ad_id):
     return ad_id
 
 # ============================================================
+# RISOLUZIONE CAPTCHA
+# ============================================================
+
+def carica_database():
+    try:
+        with open("hash_phash_db.json", "r") as f:
+            return json.load(f)
+    except:
+        return {}
+
+phash_db = carica_database()
+
+async def risolvi_captcha(page, email):
+    html = await page.content()
+    if "Please Click Similar" not in html:
+        return True
+    
+    log(email, "⚠️ CAPTCHA RILEVATO!")
+    
+    cids = [int(x) for x in re.findall(r'cid=(\d+)', html)]
+    cids_unici = list(set(cids))
+    log(email, f"   📌 CID disponibili: {cids_unici}")
+    
+    # Prova dal database
+    for stored_phash, cid in phash_db.items():
+        try:
+            img_element = await page.locator('img[src*="capimg.php"]').first
+            img_data = await img_element.screenshot()
+            from PIL import Image
+            import io
+            import imagehash
+            img_pil = Image.open(io.BytesIO(img_data))
+            phash = imagehash.phash(img_pil)
+            phash_str = str(phash)
+            
+            diff = imagehash.hex_to_hash(phash_str) - imagehash.hex_to_hash(stored_phash)
+            if diff <= 10:
+                await page.goto(f"https://antautosurf.com/index.php?cid={cid}")
+                await asyncio.sleep(2)
+                log(email, f"   ✅ CAPTCHA RISOLTO! CID: {cid} (da database)")
+                return True
+        except:
+            pass
+    
+    # Prova tutti i CID
+    for cid in cids_unici:
+        await page.goto(f"https://antautosurf.com/index.php?cid={cid}")
+        await asyncio.sleep(2)
+        html_test = await page.content()
+        if "Please Click Similar" not in html_test:
+            log(email, f"   ✅ CAPTCHA RISOLTO! CID: {cid}")
+            return True
+    
+    log(email, f"   ❌ CAPTCHA NON RISOLTO!")
+    return False
+
+# ============================================================
 # GESTISCI UN ACCOUNT
 # ============================================================
 
@@ -160,10 +332,8 @@ async def gestisci_account(account_data):
     
     log(email, f"🌐 Proxy: {proxy_str.split('@')[1] if '@' in proxy_str else proxy_str}")
     
-    # User-Agent reale
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     
-    # Argomenti anti-rilevamento
     args = [
         '--disable-blink-features=AutomationControlled',
         '--no-sandbox',
@@ -186,10 +356,19 @@ async def gestisci_account(account_data):
         
         page = await context.new_page()
         
-        # Inietta stealth
         await page.add_init_script(STEALTH_JS)
         
         try:
+            # ============================================================
+            # 🔥 ANALISI IP - PRIMA DEL LOGIN
+            # ============================================================
+            log(email, "🔍 Rilevamento IP...")
+            ip_attuale = await ottieni_ip_attuale(page)
+            if ip_attuale:
+                await registra_ip(email, ip_attuale)
+            else:
+                log(email, "⚠️ Impossibile rilevare IP")
+            
             # ============================================================
             # LOGIN
             # ============================================================
@@ -207,6 +386,36 @@ async def gestisci_account(account_data):
             
             html = await page.content()
             
+            # ============================================================
+            # REGISTRAZIONE - SE NUOVO ACCOUNT
+            # ============================================================
+            if "Set Login Password" in html:
+                log(email, "📝 NUOVO ACCOUNT! Registro...")
+                
+                match = re.search(r'name="confirm2" value="(\d+)"', html)
+                if match:
+                    confirm2 = match.group(1)
+                    log(email, f"   ✅ confirm2 trovato: {confirm2}")
+                    
+                    await page.fill('input[name="password"]', password)
+                    await page.fill('input[name="passwordb"]', password)
+                    await page.goto(f"https://antautosurf.com/index.php?password={password}&passwordb={password}&confirm2={confirm2}")
+                    await page.wait_for_load_state("networkidle")
+                    log(email, "   ✅ Registrazione inviata!")
+                    
+                    await asyncio.sleep(2)
+                    html = await page.content()
+                    if "Please enter Password" in html:
+                        log(email, "   ✅ Registrazione completata con successo!")
+                    else:
+                        log(email, "   ⚠️ Registrazione forse fallita, continuo...")
+                else:
+                    log(email, "   ❌ confirm2 NON TROVATO! Impossibile registrare.")
+                    return
+            
+            # ============================================================
+            # LOGIN CON PASSWORD
+            # ============================================================
             if "Please enter Password" in html:
                 log(email, "🔑 Login con password...")
                 await page.fill('input[name="password"]', password)
@@ -218,29 +427,32 @@ async def gestisci_account(account_data):
             log(email, "✅ Login completato!")
             
             # ============================================================
-            # DASHBOARD - ATTESA PIÙ LUNGA
+            # DASHBOARD
             # ============================================================
             log(email, "📊 Dashboard...")
             await page.goto(
                 f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=",
                 wait_until="domcontentloaded",
-                timeout=90000
+                timeout=60000
             )
-            await asyncio.sleep(5)  # Attesa più lunga per caricare tutto
+            await asyncio.sleep(5)
             
             html = await page.content()
             
+            # ============================================================
+            # 🔥 CONTROLLO BLOCCO IP
+            # ============================================================
+            bloccato, ip_bloccato = await controlla_blocco_ip(page, email)
+            if bloccato:
+                log(email, f"🔄 Riavvio il bot per cambiare proxy...")
+                await browser.close()
+                return
+            
             # CAPTCHA
             if "Please Click Similar" in html:
-                log(email, "⚠️ CAPTCHA RILEVATO!")
-                cids = [int(x) for x in re.findall(r'cid=(\d+)', html)]
-                for cid in list(set(cids)):
-                    await page.goto(f"https://antautosurf.com/index.php?cid={cid}")
-                    await asyncio.sleep(2)
-                    html_test = await page.content()
-                    if "Please Click Similar" not in html_test:
-                        log(email, f"   ✅ CAPTCHA RISOLTO! CID: {cid}")
-                        break
+                if not await risolvi_captcha(page, email):
+                    log(email, "❌ Captcha non risolto!")
+                    return
                 await asyncio.sleep(2)
                 html = await page.content()
             
@@ -253,7 +465,6 @@ async def gestisci_account(account_data):
             csrf_match = re.search(r'csrf_token=([a-f0-9]+)', html)
             if not csrf_match:
                 log(email, "❌ CSRF non trovato! Riprovo...")
-                # Ricarica dashboard
                 await page.goto(
                     f"https://antautosurf.com/index.php?bitcoinwallet={email}&ref=",
                     wait_until="domcontentloaded",
@@ -344,7 +555,7 @@ async def gestisci_account(account_data):
                     continue
                 
                 ad_url = pulisci_url(parts[0])
-                time_val = int(parts[1])  # 🔥 Timer dalla response!
+                time_val = int(parts[1])
                 key = parts[2]
                 ad_id = parts[3]
                 
@@ -406,13 +617,16 @@ async def gestisci_account(account_data):
 
 async def main():
     print("="*60)
-    print("🚀 BOT MULTIACCOUNT CON STEALTH")
+    print("🚀 BOT MULTIACCOUNT CON STEALTH + ANALISI IP")
     print("="*60)
     print(f"📋 Account: {len(ACCOUNTS)}")
     print(f"🔇 Headless: {HEADLESS}")
+    print(f"🚫 IP bloccati in lista nera: {len(IP_BLOCCATI)}")
     print("="*60)
     print("🔄 Ogni account ha il suo proxy (IP diverso!)")
     print("🔄 Ogni account fa 10 cicli, poi passa al prossimo")
+    print("📊 Sistema di analisi IP attivo")
+    print("🚫 Rilevamento blocchi IP attivo")
     print("="*60)
     
     while True:
@@ -420,9 +634,13 @@ async def main():
             await gestisci_account(account)
             await asyncio.sleep(5)
             print("─" * 60)
+            
+        # Mostra statistiche IP dopo ogni ciclo completo
+        mostra_statistiche_ip()
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
         print("\n🛑 Arresto manuale...")
+        mostra_statistiche_ip()
